@@ -47,22 +47,52 @@ Angular client                         Upload API (Node/Express)              Az
 
 ## Run locally (Azurite emulator)
 
+Requires Node.js 22.12+. The commands are the same in PowerShell, cmd and bash.
+
 ```bash
-# terminal 1: Azure Storage emulator
-cd server && npm install && npm run azurite
+# one-time setup
+cd server
+npm install
+cp .env.example .env        # PowerShell: Copy-Item .env.example .env
+                            # (defaults point at Azurite; .env is loaded automatically)
 
-# terminal 2: API
-cd server && cp .env.example .env
-AZURE_STORAGE_CONNECTION_STRING=UseDevelopmentStorage=true CONFIGURE_STORAGE_CORS=true npm run dev
+# terminal 1: Azure Storage emulator (keep it running)
+cd server
+npm run azurite
 
-# terminal 3: Angular (proxies /api to :3000)
-cd client && npm install && npm start      # http://localhost:4200
+# terminal 2: API on http://localhost:3000
+cd server
+npm run dev                 # watch mode, or: npm start (builds to dist/ first, then runs)
 
-# optional: backend end-to-end resume test
-cd server && AZURE_STORAGE_CONNECTION_STRING=UseDevelopmentStorage=true npm run test:e2e
+# terminal 3: Angular on http://localhost:4200 (proxies /api to :3000)
+cd client
+npm install
+npm start
+
+# optional: backend end-to-end resume test (needs terminals 1 and 2)
+cd server
+npm run test:e2e
 ```
 
+Check the API with `curl http://localhost:3000/healthz`, which returns `ok`. If startup fails with
+"Could not reach Azure Storage", Azurite isn't running or `.env` is missing.
+
 To try a drop by hand: start a big upload, then in Chrome DevTools open the Network tab and set throttling to **Offline**, then back to **No throttling**.
+
+## Debugging
+
+Open the repo root in VS Code, start Azurite (`npm run azurite` in `server/`), then open **Run and Debug**
+(Ctrl+Shift+D), pick a configuration and press **F5**. Breakpoints go straight into the `.ts` files, with no build step.
+
+| Configuration | Use it to |
+|---|---|
+| **Debug API** | Run the API under the debugger (loads `server/.env`) |
+| **Debug E2E resume test** | Step through the drop-and-resume test; start **Debug API** first |
+| **Debug API + Angular** | Debug the server and the Angular client (Chrome) together; run `npm start` in `client/` first |
+| **Attach to API (port 9229)** | Attach to an API started with `npm run debug` in `server/` |
+
+Good breakpoints: the `uploadsRouter.post('/')`, `get('/:id')` and `post('/:id/complete')` handlers in
+`server/src/routes/uploads.ts`, and `getUploadedBlocks()`, which answers "which blocks does Azure already have?".
 
 ## Production on Azure
 

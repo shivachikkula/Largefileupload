@@ -30,7 +30,16 @@ app.get('/healthz', (_req, res) => {
 app.use('/api/uploads', demoAuth, uploadsRouter);
 app.use(errorHandler);
 
-await initStorage();
+try {
+  await initStorage();
+} catch (err) {
+  console.error(
+    '\nCould not reach Azure Storage. Is Azurite running (`npm run azurite`), and is\n' +
+      'AZURE_STORAGE_CONNECTION_STRING / AZURE_STORAGE_ACCOUNT_URL set (see .env.example)?\n',
+  );
+  console.error(err instanceof Error ? err.message : err);
+  process.exit(1);
+}
 app.listen(config.port, () => {
   console.log(`Upload API listening on http://localhost:${config.port}`);
 });

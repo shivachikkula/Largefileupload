@@ -6,10 +6,12 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js",
-    "dev": "tsx watch src/index.ts",
+    "prestart": "npm run build",
+    "start": "node --env-file-if-exists=.env dist/index.js",
+    "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
     "azurite": "azurite-blob --silent --skipApiVersionCheck --location .azurite --blobHost 127.0.0.1 --blobPort 10000",
-    "test:e2e": "tsx scripts/e2e-resume.ts"
+    "test:e2e": "tsx --env-file-if-exists=.env scripts/e2e-resume.ts",
+    "debug": "node --env-file-if-exists=.env --import tsx --inspect src/index.ts"
   },
   "dependencies": {
     "@azure/identity": "^4.13.3",
@@ -25,5 +27,8 @@
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  }
 }
