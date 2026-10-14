@@ -17,7 +17,10 @@ function createServiceClient(): BlobServiceClient {
   if (config.accountUrl) {
     return new BlobServiceClient(config.accountUrl, new DefaultAzureCredential());
   }
-  throw new Error('Set AZURE_STORAGE_CONNECTION_STRING or AZURE_STORAGE_ACCOUNT_URL');
+  throw new Error(
+    'Set AZURE_STORAGE_CONNECTION_STRING or AZURE_STORAGE_ACCOUNT_URL. For local development copy ' +
+      'server/.env.example to server/.env (PowerShell: Copy-Item .env.example .env).',
+  );
 }
 
 export const blobService = createServiceClient();
