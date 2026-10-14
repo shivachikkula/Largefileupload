@@ -10,7 +10,8 @@
     "start": "node --env-file-if-exists=.env dist/index.js",
     "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
     "azurite": "azurite-blob --silent --skipApiVersionCheck --location .azurite --blobHost 127.0.0.1 --blobPort 10000",
-    "test:e2e": "tsx --env-file-if-exists=.env scripts/e2e-resume.ts"
+    "test:e2e": "tsx --env-file-if-exists=.env scripts/e2e-resume.ts",
+    "debug": "node --env-file-if-exists=.env --import tsx --inspect src/index.ts"
   },
   "dependencies": {
     "@azure/identity": "^4.13.3",

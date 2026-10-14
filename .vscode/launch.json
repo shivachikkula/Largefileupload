@@ -1,0 +1,47 @@
+{
+  // Start the storage emulator first: `npm run azurite` in server/ (or the Azurite VS Code extension).
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug API",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/server",
+      "program": "${workspaceFolder}/server/src/index.ts",
+      // Runs the TypeScript directly (no build step) and loads server/.env
+      "runtimeArgs": ["--env-file-if-exists=.env", "--import", "tsx"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      "name": "Debug E2E resume test",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/server",
+      "program": "${workspaceFolder}/server/scripts/e2e-resume.ts",
+      "runtimeArgs": ["--env-file-if-exists=.env", "--import", "tsx"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      "name": "Attach to API (port 9229)",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      "name": "Debug Angular client (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}/client"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug API + Angular",
+      "configurations": ["Debug API", "Debug Angular client (Chrome)"]
+    }
+  ]
+}

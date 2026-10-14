@@ -79,6 +79,21 @@ Check the API with `curl http://localhost:3000/healthz`, which returns `ok`. If 
 
 To try a drop by hand: start a big upload, then in Chrome DevTools open the Network tab and set throttling to **Offline**, then back to **No throttling**.
 
+## Debugging
+
+Open the repo root in VS Code, start Azurite (`npm run azurite` in `server/`), then open **Run and Debug**
+(Ctrl+Shift+D), pick a configuration and press **F5**. Breakpoints go straight into the `.ts` files, with no build step.
+
+| Configuration | Use it to |
+|---|---|
+| **Debug API** | Run the API under the debugger (loads `server/.env`) |
+| **Debug E2E resume test** | Step through the drop-and-resume test; start **Debug API** first |
+| **Debug API + Angular** | Debug the server and the Angular client (Chrome) together; run `npm start` in `client/` first |
+| **Attach to API (port 9229)** | Attach to an API started with `npm run debug` in `server/` |
+
+Good breakpoints: the `uploadsRouter.post('/')`, `get('/:id')` and `post('/:id/complete')` handlers in
+`server/src/routes/uploads.ts`, and `getUploadedBlocks()`, which answers "which blocks does Azure already have?".
+
 ## Production on Azure
 
 - **Auth:** replace `demoAuth` in `server/src/index.ts` with real token validation (e.g. Entra ID/MSAL) and use the user's `oid`.
