@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug API",
+      "name": "Debug Node API",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}/server",
@@ -12,6 +12,21 @@
       "runtimeArgs": ["--env-file-if-exists=.env", "--import", "tsx"],
       "console": "integratedTerminal",
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      "name": "Debug .NET API",
+      // Needs the C# Dev Kit (or C#) extension. Listens on http://localhost:3000 like the Node API.
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build .NET API",
+      "program": "${workspaceFolder}/server-dotnet/LargeFileUpload.Api/bin/Debug/net10.0/LargeFileUpload.Api.dll",
+      "cwd": "${workspaceFolder}/server-dotnet/LargeFileUpload.Api",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:3000"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
     },
     {
       "name": "Debug E2E resume test",
@@ -40,8 +55,12 @@
   ],
   "compounds": [
     {
-      "name": "Debug API + Angular",
-      "configurations": ["Debug API", "Debug Angular client (Chrome)"]
+      "name": "Debug Node API + Angular",
+      "configurations": ["Debug Node API", "Debug Angular client (Chrome)"]
+    },
+    {
+      "name": "Debug .NET API + Angular",
+      "configurations": ["Debug .NET API", "Debug Angular client (Chrome)"]
     }
   ]
 }
