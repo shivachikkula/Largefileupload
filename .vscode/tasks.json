@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build .NET API",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}/server-dotnet/LargeFileUpload.Api/LargeFileUpload.Api.csproj"],
+      "problemMatcher": "$msCompile",
+      "group": "build"
+    }
+  ]
+}
